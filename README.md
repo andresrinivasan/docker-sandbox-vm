@@ -1,6 +1,12 @@
-# ubuntu-docker-vm
+# Ubuntu as a Docker VM
 
-Sometimes you just want a Linux VM sandbox and Docker is perfect. While you could use `docker run -it ubuntu`, as soon as you exit the shell, the image exits and you lose your VM. The intent here is to create a longer lived image.
+This project grew out of a moment when I needed a VM and I thought it would be easier to start up a Linux container than to create a full VM. My goal became to create a sandbox environment that I could reuse. In retrospect it would have been faster to to have created a VM or invest in Vagrant (my host is as an M2 Air).
+
+## Goals
+
+  * Have all the tools I need to install other software and debug my environment
+  * Have just enough X11 to run a GUI app with a remote display (I used XQuartz)
+  * Delegate to the host Docker Engine for sibling containers
 
 ## Build and Run
 
@@ -8,4 +14,15 @@ Sometimes you just want a Linux VM sandbox and Docker is perfect. While you coul
 make
 ```
 
-The container will be started with both the Docker Engine socket and the X11 socket mounted so that you can run sibling containers in the VM and use GUI apps assuming you have an X11 server running on the host.
+or if you want to force a complete image rebuild,
+
+```sh
+NO_CACHE=--no-cache make
+```
+
+The container will be started with the Docker Engine socket mounted so that you can run sibling containers from the VM. The environment has the DISPLAY set to use the X11 server on the host.
+
+## To Do
+
+  * Shell configuration, completion
+  * Disable IPv6 in container

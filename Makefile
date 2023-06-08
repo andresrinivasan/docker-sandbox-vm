@@ -3,9 +3,10 @@
 run: image container
 
 image: 
-	docker build -t ubuntu-vm:latest .
+	docker build ${NO_CACHE} -t ubuntu-vm:latest .
 
 container:
 	docker run --detach \
-		-v /var/run/docker.sock:/var/run/docker.sock -v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		--env-file ./env.list \
 		--name ubuntu-vm ubuntu-vm:latest
