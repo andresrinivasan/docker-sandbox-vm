@@ -15,7 +15,7 @@ ENV LANGUAGE en_US.UTF-8
 # Core tools
 RUN apt-get update 
 RUN apt-get install -y vim wget git lsb-release net-tools iputils-ping less unzip dnsutils \
-    iproute2 openssh-server software-properties-common python3-pip python3-numpy  && \
+    iproute2 openssh-server software-properties-common python3-pip bash-completion && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 2 && \
     pip3 install --upgrade pip 
 
