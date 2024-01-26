@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM debian
 
 ## Borrowed liberally from https://github.com/gezp/docker-ubuntu-desktop
 
@@ -15,28 +15,16 @@ ENV LANGUAGE en_US.UTF-8
 # Core tools
 RUN apt-get update 
 RUN apt-get install -y vim wget git lsb-release net-tools iputils-ping less unzip dnsutils \
-    iproute2 openssh-server software-properties-common python3-pip bash-completion && \
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 2 && \
-    pip3 install --upgrade pip 
+    iproute2 openssh-server software-properties-common bash-completion curl httpie jq
 
-# X11 and OpenGL tools
-RUN apt-get install -y xorg x11-apps mesa-utils
+# X11 and OpenGL
+RUN apt-get install -y xorg x11-apps mesa-utils libgtk-3-0
 
-# From https://docs.docker.com/engine/install/ubuntu/
+## From https://docs.docker.com/engine/install/debian/
 ## Begin Docker Install
-RUN apt-get install -y ca-certificates curl gnupg
 
-RUN install -m 0755 -d /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-RUN chmod a+r /etc/apt/keyrings/docker.gpg
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh ./get-docker.sh && rm get-docker.sh
 
-RUN echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update
-
-RUN apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ## End Docker Install
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
